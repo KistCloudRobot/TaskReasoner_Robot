@@ -91,10 +91,10 @@ public class TaskReasoner_Robot extends ArbiAgent {
 		init();
 	}
 	
-	public TaskReasoner_Robot(String robotID) {
+	public TaskReasoner_Robot(String robotID, String ip, int port) {
 
 
-		initAddress(robotID);
+		initAddress(robotID,ip,port);
 		//config();
 		interpreter = JAM.parse(new String[] {"./TaskReasonerRobotPlan/boot.jam"} );
 		
@@ -118,29 +118,30 @@ public class TaskReasoner_Robot extends ArbiAgent {
 		init();
 	}
 	
-	public void initAddress(String robotID) {
-		
+	public void initAddress(String robotID, String ip, int port) {
+		String brokerURL = "";
+		if(ip.equals("env")) {
+			brokerURL = "tcp://" + System.getenv("JMS_BROKER");
+		} else {
+			brokerURL = "tcp://" + ip;
+		}
 		ENV_ROBOT_NAME = robotID;
-		String ip = "tcp://172.16.165.171";
-		String port ="";
 		
 		if (ENV_ROBOT_NAME.equals("AMR_LIFT1")) {
 			ENV_AGENT_NAME = "Lift1";
-			ENV_JMS_BROKER = ip + ":61116";
 			RobotPlanPath = "./TaskReasonerRobotPlan/LiftPlanList.jam";
 		} else if (ENV_ROBOT_NAME.equals("AMR_LIFT2")) {
 			ENV_AGENT_NAME = "Lift2";
-			ENV_JMS_BROKER = ip + ":61115";
 			RobotPlanPath = "./TaskReasonerRobotPlan/LiftPlanList.jam";
 		}else if (ENV_ROBOT_NAME.equals("AMR_TOW1")) {
 			ENV_AGENT_NAME = "Tow1";
-			ENV_JMS_BROKER = ip + ":61114";
 			RobotPlanPath = "./TaskReasonerRobotPlan/TowPlanList.jam";
 		}else if (ENV_ROBOT_NAME.equals("AMR_TOW2")) {
 			ENV_AGENT_NAME = "Tow2";
-			ENV_JMS_BROKER = ip + ":61412";
 			RobotPlanPath = "./TaskReasonerRobotPlan/TowPlanList.jam";
 		}
+		
+		ENV_JMS_BROKER = brokerURL +":"+ port;
 
 		TASKMANAGER_ADDRESS = agentURIPrefix + ARBI_PREFIX + ENV_AGENT_NAME + "/TaskManager";
 		TASKREASONER_ADDRESS = ARBI_PREFIX + ENV_AGENT_NAME + "/TaskReasoner";
