@@ -21,31 +21,26 @@ PLAN PERFORM WaitGoalComplete($goalName) {
 		FACT GLMessageManager($glManager);
 	BODY :
 		System.out.println("start WaitGoalComplete : WaitGoalCompletePalletTransportedRequestedFrom");
-		
-		System.out.println($reportGL);
-		//$reportGL = $glManager.escapeGL($reportGL);
-		
-		//$reportGL = $glManager.unescapeGL($reportGL);
-			
-		System.out.println($reportGL);
+
+		//System.out.println($reportGL);
 		$goalGL = $glManager.retrieveGLExpression($reportGL, 2);
 			
-		System.out.println($goalGL);
+		//System.out.println($goalGL);
 		$goalGL = $glManager.unescapeGL($goalGL);
-		System.out.println($goalGL);
+		//System.out.println($goalGL);
 		$goalMetadata =  $glManager.retrieveGLExpression($goalGL, 0);
 		
 		$goalID =  $glManager.retrieveGLExpression($goalMetadata, 0);
 		
-		System.out.println($goalID);
+		//System.out.println($goalID);
 		$argumentGL =  $glManager.retrieveGLExpression($goalGL, 2);
 	
 		$object = $glManager.retrieveGLExpression($argumentGL, 0);
-		System.out.println($object);
+		//System.out.println($object);
 		$startStation = $glManager.retrieveGLExpression($argumentGL, 1);
-		System.out.println($startStation);
+		//System.out.println($startStation);
 		$endStation = $glManager.retrieveGLExpression($argumentGL, 2);
-		System.out.println($endStation);
+		//System.out.println($endStation);
 		$goal = $glManager.escapeGL($goalGL);
 		ASSERT PalletTransportationRequested($goal, $goalID, $object, $startStation, $endStation);
 		
@@ -67,30 +62,25 @@ PLAN PERFORM WaitGoalComplete($goalName) {
 	BODY :
 		System.out.println("start WaitGoalComplete : WaitGoalCompleteMovingRackTrasportedRequestedFrom");
 		
-		System.out.println($reportGL);
-		//$reportGL = $glManager.escapeGL($reportGL);
-		
-		//$reportGL = $glManager.unescapeGL($reportGL);
-			
-		System.out.println($reportGL);
+		//System.out.println($reportGL);
 		$goalGL = $glManager.retrieveGLExpression($reportGL, 2);
 			
-		System.out.println($goalGL);
+		//System.out.println($goalGL);
 		$goalGL = $glManager.unescapeGL($goalGL);
-		System.out.println($goalGL);
+		//System.out.println($goalGL);
 		$goalMetadata =  $glManager.retrieveGLExpression($goalGL, 0);
 		
 		$goalID =  $glManager.retrieveGLExpression($goalMetadata, 0);
 		
-		System.out.println($goalID);
+		//System.out.println($goalID);
 		$argumentGL =  $glManager.retrieveGLExpression($goalGL, 2);
 	
 		$object = $glManager.retrieveGLExpression($argumentGL, 0);
-		System.out.println($object);
+		//System.out.println($object);
 		$startStation = $glManager.retrieveGLExpression($argumentGL, 1);
-		System.out.println($startStation);
+		//System.out.println($startStation);
 		$endStation = $glManager.retrieveGLExpression($argumentGL, 2);
-		System.out.println($endStation);
+		//System.out.println($endStation);
 		$goal = $glManager.escapeGL($goalGL);
 		ASSERT MovingRackTransportationRequested($goal, $goalID, $object, $startStation, $endStation);
 		

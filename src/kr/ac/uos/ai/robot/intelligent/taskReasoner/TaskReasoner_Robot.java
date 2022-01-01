@@ -263,11 +263,10 @@ public class TaskReasoner_Robot extends ArbiAgent {
 	@Override
 	public void onData(String sender, String data) {
 		try {
-			System.out.println("data = " + data);
+			//System.out.println("data = " + data);
 			RecievedMessage message = new RecievedMessage(sender, data);
 				
 			messageQueue.put(message);
-			System.out.println("message enqueued! : " + message.getMessage());
 		} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -300,7 +299,7 @@ public class TaskReasoner_Robot extends ArbiAgent {
 
 				gl = GLFactory.newGLFromGLString(data);
 
-				System.out.println("message dequeued : " + gl.toString());
+				//System.out.println("message dequeued : " + gl.toString());
 
 				if (gl.getName().equals("context")) {
 
