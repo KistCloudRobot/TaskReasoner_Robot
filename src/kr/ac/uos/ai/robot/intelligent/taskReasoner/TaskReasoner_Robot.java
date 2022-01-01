@@ -263,10 +263,11 @@ public class TaskReasoner_Robot extends ArbiAgent {
 	@Override
 	public void onData(String sender, String data) {
 		try {
-			System.out.println("data  = " + data);
+			System.out.println("data = " + data);
 			RecievedMessage message = new RecievedMessage(sender, data);
-
+				
 			messageQueue.put(message);
+			System.out.println("message enqueued! : " + message.getMessage());
 		} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -305,8 +306,9 @@ public class TaskReasoner_Robot extends ArbiAgent {
 
 					glMessageManager.assertContext(gl.getExpression(0).asGeneralizedList());
 				} else if (gl.getName().equals("goalComplete")) {
-					glMessageManager.assertContext(gl.getExpression(0).asGeneralizedList());
-					glMessageManager.assertFact("GoalCompleted",gl.getExpression(0).asGeneralizedList().getName(), gl.getExpression(0).asGeneralizedList().toString());
+					GeneralizedList goalGL = gl.getExpression(0).asGeneralizedList();
+					System.out.println("completed goal name : " + goalGL.getName());
+					glMessageManager.assertFact("GoalCompleted",goalGL.getName(),goalGL.toString());
 				} else if(gl.getExpression(0).isGeneralizedList()) {
 					System.out.println(gl.toString());
 				} else {
