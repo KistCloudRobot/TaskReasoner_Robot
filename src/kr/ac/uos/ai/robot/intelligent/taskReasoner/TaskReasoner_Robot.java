@@ -45,8 +45,8 @@ public class TaskReasoner_Robot extends ArbiAgent {
 	
 	private static String brokerURI = "tcp://172.16.165.204:61114";
 	private static int brokerType = 2;
-	private static String TASKREASONER_ADDRESS;
-	private static String TASKMANAGER_ADDRESS;
+	private static String TASKREASONER_ADDRESS = "www.arbi.com/TaskReasoner";
+	private static String TASKMANAGER_ADDRESS = "agent://www.arbi.com/TaskManager";
 	private String RobotPlanPath;
 	private static final String	agentURIPrefix			= "agent://";
 	private static final String	dsURIPrefix				= "ds://";
@@ -143,9 +143,6 @@ public class TaskReasoner_Robot extends ArbiAgent {
 		
 		ENV_JMS_BROKER = brokerURL +":"+ port;
 
-		TASKMANAGER_ADDRESS = agentURIPrefix + ARBI_PREFIX + ENV_AGENT_NAME + "/TaskManager";
-		TASKREASONER_ADDRESS = ARBI_PREFIX + ENV_AGENT_NAME + "/TaskReasoner";
-		
 	}
 
 	
@@ -153,15 +150,11 @@ public class TaskReasoner_Robot extends ArbiAgent {
 	public void initAddress() {
 		try {
 			String ip = InetAddress.getLocalHost().getHostAddress();
-			//ENV_JMS_BROKER = "tcp://"+System.getenv("JMS_BROKER");
-			//ENV_AGENT_NAME = System.getenv("AGENT");
-			//ENV_ROBOT_NAME = System.getenv("ROBOT");
+			ENV_JMS_BROKER = "tcp://"+System.getenv("JMS_BROKER");
+			ENV_AGENT_NAME = System.getenv("AGENT");
+			ENV_ROBOT_NAME = System.getenv("ROBOT");
 			
-			ENV_JMS_BROKER = "tcp://172.16.165.171" + ":61412";
-			ENV_AGENT_NAME = "Tow2";
-			ENV_ROBOT_NAME = "AMR_TOW2";
-			TASKMANAGER_ADDRESS = agentURIPrefix + ARBI_PREFIX + ENV_AGENT_NAME + "/TaskManager";
-			TASKREASONER_ADDRESS = ARBI_PREFIX + ENV_AGENT_NAME + "/TaskReasoner";
+			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
