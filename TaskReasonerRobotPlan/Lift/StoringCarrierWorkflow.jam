@@ -15,12 +15,13 @@ PLAN PERFORM ThrowWorkflow() {
 		PERFORM ThrowGoal("ObjectGrabbed");
 		PERFORM ThrowGoal("MoveToLocationEnd");
 		PERFORM ThrowGoal("ObjectPlaced");
-		//PERFORM ThrowGoal("ReturnToWait");
 		
 		System.out.println("PalletTransportedReportedTo start");
 		PERFORM ThrowGoal("PalletTransportedReportedTo");
 		
 		System.out.println("PalletTransportedReportedTo end");
+		
+		//PERFORM ThrowGoal("ReturnToWait");
 		PERFORM FinalizeService();
 		ASSERT PostWorkflowGoals();
 		

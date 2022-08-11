@@ -1,21 +1,11 @@
 package kr.ac.uos.ai.robot.intelligent.taskReasoner;
 
 
-import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 
 import kr.ac.uos.ai.arbi.agent.ArbiAgent;
 import kr.ac.uos.ai.arbi.agent.ArbiAgentExecutor;
@@ -25,12 +15,10 @@ import kr.ac.uos.ai.arbi.model.GLFactory;
 import kr.ac.uos.ai.arbi.model.GeneralizedList;
 import kr.ac.uos.ai.arbi.model.parser.ParseException;
 import kr.ac.uos.ai.robot.intelligent.taskReasoner.action.TaskReasonerAction;
-import kr.ac.uos.ai.robot.intelligent.taskReasoner.action.argument.ContextArgument;
 import kr.ac.uos.ai.robot.intelligent.taskReasoner.message.GLMessageManager;
 import kr.ac.uos.ai.robot.intelligent.taskReasoner.message.JsonMessageManager;
 import kr.ac.uos.ai.robot.intelligent.taskReasoner.message.RecievedMessage;
 import kr.ac.uos.ai.robot.intelligent.taskReasoner.policy.PolicyHandler;
-import kr.ac.uos.ai.robot.intelligent.taskReasoner.server.Server;
 import kr.ac.uos.ai.robot.intelligent.taskReasoner.service.ServiceModelGenerator;
 import kr.ac.uos.ai.robot.intelligent.taskReasoner.utility.UtilityCalculator;
 import uos.ai.jam.Interpreter;
@@ -79,7 +67,6 @@ public class TaskReasoner_Robot extends ArbiAgent {
 		serviceModelGenerator = new ServiceModelGenerator(this);
 		policyHandler = new PolicyHandler(this,interpreter);
 		jsonMessageManager = new JsonMessageManager(policyHandler);
-		//server = new Server(this);
 		utilityCalculator = new UtilityCalculator(interpreter);
 		
 		ArbiAgentExecutor.execute(ENV_JMS_BROKER,  agentURIPrefix + TASKREASONER_ADDRESS, this, brokerType);
@@ -91,11 +78,10 @@ public class TaskReasoner_Robot extends ArbiAgent {
 		init();
 	}
 	
-	public TaskReasoner_Robot(String robotID, String ip, int port) {
+	public TaskReasoner_Robot(String robotID, String brokerAddress) {
 
 
-		initAddress(robotID,ip,port);
-		//config();
+		initAddress(robotID,brokerAddress);
 		interpreter = JAM.parse(new String[] {"./TaskReasonerRobotPlan/boot.jam"} );
 		
 		ds = new TaskReasonerDataSource(this);
@@ -106,7 +92,6 @@ public class TaskReasoner_Robot extends ArbiAgent {
 		serviceModelGenerator = new ServiceModelGenerator(this);
 		policyHandler = new PolicyHandler(this,interpreter);
 		jsonMessageManager = new JsonMessageManager(policyHandler);
-		//server = new Server(this);
 		utilityCalculator = new UtilityCalculator(interpreter);
 		
 		ArbiAgentExecutor.execute(ENV_JMS_BROKER,  agentURIPrefix + TASKREASONER_ADDRESS, this, brokerType);
@@ -118,12 +103,12 @@ public class TaskReasoner_Robot extends ArbiAgent {
 		init();
 	}
 	
-	public void initAddress(String robotID, String ip, int port) {
+	public void initAddress(String robotID, String brokerAddress) {
 		String brokerURL = "";
-		if(ip.equals("env")) {
+		if(brokerAddress.equals("env")) {
 			brokerURL = "tcp://" + System.getenv("JMS_BROKER");
 		} else {
-			brokerURL = "tcp://" + ip;
+			brokerURL = brokerAddress;
 		}
 		ENV_ROBOT_NAME = robotID;
 		
@@ -141,7 +126,7 @@ public class TaskReasoner_Robot extends ArbiAgent {
 			RobotPlanPath = "./TaskReasonerRobotPlan/TowPlanList.jam";
 		}
 		
-		ENV_JMS_BROKER = brokerURL +":"+ port;
+		ENV_JMS_BROKER = brokerURL;
 
 	}
 
@@ -156,47 +141,10 @@ public class TaskReasoner_Robot extends ArbiAgent {
 			
 			
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	private void config() {
-
-		try {
-			File file = new File("configuration/TaskReasonerConfiguration.xml");
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(file);
-			XPathFactory xPathFactory = XPathFactory.newInstance();
-			XPath xPath = xPathFactory.newXPath();
-			
-			XPathExpression _brokerURI = xPath.compile("//ServerURL");
-			Node n = (Node) _brokerURI.evaluate(doc, XPathConstants.NODE);
-			brokerURI = n.getTextContent();
-			
-			XPathExpression _myURI = xPath.compile("//AgentName");
-			n = (Node) _myURI.evaluate(doc, XPathConstants.NODE);
-			TASKREASONER_ADDRESS = n.getTextContent();
-			
-			XPathExpression _brokerType = xPath.compile("//BrokerType");
-			n = (Node) _brokerType.evaluate(doc, XPathConstants.NODE);
-			if (n.getTextContent().equals("ZeroMQ")) {
-				brokerType = 2;
-			} else if (n.getTextContent().equals("Apollo")) {
-				brokerType = 1;
-			}
-			
-			XPathExpression _TM_URI = xPath.compile("//TaskManagerName");
-			n = (Node) _TM_URI.evaluate(doc, XPathConstants.NODE);
-			TASKMANAGER_ADDRESS = n.getTextContent();
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
+		
 	private void init() {
 		
 		glMessageManager.assertFact("GLMessageManager", glMessageManager);
@@ -256,12 +204,11 @@ public class TaskReasoner_Robot extends ArbiAgent {
 	@Override
 	public void onData(String sender, String data) {
 		try {
-			//System.out.println("data = " + data);
+			System.out.println("data = " + data);
 			RecievedMessage message = new RecievedMessage(sender, data);
 				
 			messageQueue.put(message);
 		} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 		}
 	}
@@ -274,7 +221,6 @@ public class TaskReasoner_Robot extends ArbiAgent {
 		try {
 			Thread.sleep(count);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -308,7 +254,6 @@ public class TaskReasoner_Robot extends ArbiAgent {
 				}
 
 			} catch (InterruptedException | ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
