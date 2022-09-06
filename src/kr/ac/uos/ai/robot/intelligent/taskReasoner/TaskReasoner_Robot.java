@@ -27,7 +27,6 @@ import uos.ai.jam.JAM;
 public class TaskReasoner_Robot extends ArbiAgent {
 
 	public static String ENV_JMS_BROKER;
-	public static String ENV_AGENT_NAME;
 	public static String ENV_ROBOT_NAME;
 	public static final String ARBI_PREFIX = "www.arbi.com/";
 	
@@ -113,17 +112,13 @@ public class TaskReasoner_Robot extends ArbiAgent {
 		ENV_ROBOT_NAME = robotID;
 		
 		if (ENV_ROBOT_NAME.equals("AMR_LIFT1")) {
-			ENV_AGENT_NAME = "Lift1";
 			RobotPlanPath = "./TaskReasonerRobotPlan/LiftPlanList.jam";
 		} else if (ENV_ROBOT_NAME.equals("AMR_LIFT2")) {
-			ENV_AGENT_NAME = "Lift2";
 			RobotPlanPath = "./TaskReasonerRobotPlan/LiftPlanList.jam";
-		}else if (ENV_ROBOT_NAME.equals("AMR_TOW1")) {
-			ENV_AGENT_NAME = "Tow1";
-			RobotPlanPath = "./TaskReasonerRobotPlan/TowPlanList.jam";
-		}else if (ENV_ROBOT_NAME.equals("AMR_TOW2")) {
-			ENV_AGENT_NAME = "Tow2";
-			RobotPlanPath = "./TaskReasonerRobotPlan/TowPlanList.jam";
+		}else if (ENV_ROBOT_NAME.equals("AMR_LIFT3")) {
+			RobotPlanPath = "./TaskReasonerRobotPlan/LiftPlanList.jam";
+		}else if (ENV_ROBOT_NAME.equals("AMR_LIFT4")) {
+			RobotPlanPath = "./TaskReasonerRobotPlan/LiftPlanList.jam";
 		}
 		
 		ENV_JMS_BROKER = brokerURL;
@@ -136,9 +131,7 @@ public class TaskReasoner_Robot extends ArbiAgent {
 		try {
 			String ip = InetAddress.getLocalHost().getHostAddress();
 			ENV_JMS_BROKER = "tcp://"+System.getenv("JMS_BROKER");
-			ENV_AGENT_NAME = System.getenv("AGENT");
 			ENV_ROBOT_NAME = System.getenv("ROBOT");
-			
 			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -173,8 +166,8 @@ public class TaskReasoner_Robot extends ArbiAgent {
 		//ds.subscribe(subscriveGoal);
 		// (goal (goalName ))
 				
-		String subscriveContext = "(rule (fact (hello $context)) --> (notify (hello $context)))";
-		System.out.println(ds.subscribe(subscriveContext));
+		//String subscriveContext = "(rule (fact (context $context)) --> (notify (context $context)))";
+		//System.out.println(ds.subscribe(subscriveContext));
 		
 		
 		
