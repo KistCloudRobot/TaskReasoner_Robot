@@ -120,7 +120,6 @@ public class TaskReasoner_Robot extends ArbiAgent {
 		}else if (ENV_ROBOT_NAME.equals("AMR_LIFT4")) {
 			RobotPlanPath = "./TaskReasonerRobotPlan/LiftPlanList.jam";
 		}
-		
 		ENV_JMS_BROKER = brokerURL;
 
 	}
