@@ -9,7 +9,8 @@ public class TaskResoner_Robot_Lift1 {
 		String brokerAddress;
 		String robotID;
 		if(args.length == 0) {
-			brokerAddress = "tcp://172.16.165.141:61116";
+//			brokerAddress = "tcp://172.16.165.141:61116";
+			brokerAddress = "tcp://192.168.100.10:61116";
 			robotID = "AMR_LIFT1";	
 		} else {
 			robotID = args[0];

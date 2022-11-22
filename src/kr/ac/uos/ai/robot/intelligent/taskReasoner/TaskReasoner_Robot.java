@@ -31,7 +31,7 @@ public class TaskReasoner_Robot extends ArbiAgent {
 	public static final String ARBI_PREFIX = "www.arbi.com/";
 	
 	private static String brokerURI = "tcp://172.16.165.204:61114";
-	private static BrokerType brokerType = BrokerType.ZEROMQ;
+	private static BrokerType brokerType = BrokerType.ACTIVEMQ;
 	private static String TASKREASONER_ADDRESS = "www.arbi.com/TaskReasoner";
 	private static String TASKMANAGER_ADDRESS = "agent://www.arbi.com/TaskManager";
 	private String RobotPlanPath;
