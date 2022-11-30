@@ -20,7 +20,7 @@ public class CMTest extends ArbiAgent {
 	
 	@Override
 	public void onStart() {
-		dataSource.connect(brokerURI, dsURIPrefix+CM_URI, BrokerType.ACTIVEMQ);
+//		dataSource.connect(brokerURI, dsURIPrefix+CM_URI, BrokerType.ACTIVEMQ);
 	}
 	
 	@Override
@@ -31,8 +31,8 @@ public class CMTest extends ArbiAgent {
 
 	public static void main(String[] args) throws InterruptedException {
 		ArbiAgent cm = new CMTest();	
-		ArbiAgentExecutor.execute(brokerURI, agentURIPrefix+CM_URI, cm, BrokerType.ACTIVEMQ);
-		
+//		ArbiAgentExecutor.execute(brokerURI, agentURIPrefix+CM_URI, cm, BrokerType.ACTIVEMQ);
+//		
 
 		System.out.println("CMTest start");
 		dataSource.assertFact("(context (MeetingTimeApproached))");

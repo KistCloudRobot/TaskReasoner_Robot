@@ -31,7 +31,6 @@ public class TaskReasoner_Robot extends ArbiAgent {
 	public static final String ARBI_PREFIX = "www.arbi.com/";
 	
 	private static String brokerURI = "tcp://172.16.165.204:61114";
-	private static BrokerType brokerType = BrokerType.ZEROMQ;
 	private static String TASKREASONER_ADDRESS = "www.arbi.com/TaskReasoner";
 	private static String TASKMANAGER_ADDRESS = "agent://www.arbi.com/TaskManager";
 	private String RobotPlanPath;
@@ -51,33 +50,33 @@ public class TaskReasoner_Robot extends ArbiAgent {
 	private UtilityCalculator							utilityCalculator;
 	
 
-	public TaskReasoner_Robot() {
-
-
-		initAddress();
-		//config();
-		interpreter = JAM.parse(new String[] {"./TaskReasonerTowPlan/boot.jam"} );
-		
-		ds = new TaskReasonerDataSource(this);
-		
-		messageQueue= new LinkedBlockingQueue<RecievedMessage>();
-		glMessageManager = new GLMessageManager(interpreter, ds);
-		planLoader = new PlanLoader(interpreter);
-		serviceModelGenerator = new ServiceModelGenerator(this);
-		policyHandler = new PolicyHandler(this,interpreter);
-		jsonMessageManager = new JsonMessageManager(policyHandler);
-		utilityCalculator = new UtilityCalculator(interpreter);
-		
-		ArbiAgentExecutor.execute(ENV_JMS_BROKER,  agentURIPrefix + TASKREASONER_ADDRESS, this, brokerType);
-
-		loggerManager = LoggerManager.getInstance();
-		
-		taskReasonerAction = new TaskReasonerAction(this, interpreter, loggerManager);
-		
-		init();
-	}
-	
-	public TaskReasoner_Robot(String robotID, String brokerAddress) {
+//	public TaskReasoner_Robot() {
+//
+//
+//		initAddress();
+//		//config();
+//		interpreter = JAM.parse(new String[] {"./TaskReasonerTowPlan/boot.jam"} );
+//		
+//		ds = new TaskReasonerDataSource(this);
+//		
+//		messageQueue= new LinkedBlockingQueue<RecievedMessage>();
+//		glMessageManager = new GLMessageManager(interpreter, ds);
+//		planLoader = new PlanLoader(interpreter);
+//		serviceModelGenerator = new ServiceModelGenerator(this);
+//		policyHandler = new PolicyHandler(this,interpreter);
+//		jsonMessageManager = new JsonMessageManager(policyHandler);
+//		utilityCalculator = new UtilityCalculator(interpreter);
+//		
+//		ArbiAgentExecutor.execute(ENV_JMS_BROKER,  agentURIPrefix + TASKREASONER_ADDRESS, this, brokerType);
+//
+//		loggerManager = LoggerManager.getInstance();
+//		
+//		taskReasonerAction = new TaskReasonerAction(this, interpreter, loggerManager);
+//		
+//		init();
+//	}
+//	
+	public TaskReasoner_Robot(String robotID, String brokerAddress, int port, BrokerType brokerType) {
 
 
 		initAddress(robotID,brokerAddress);
@@ -93,8 +92,9 @@ public class TaskReasoner_Robot extends ArbiAgent {
 		jsonMessageManager = new JsonMessageManager(policyHandler);
 		utilityCalculator = new UtilityCalculator(interpreter);
 		
-		ArbiAgentExecutor.execute(ENV_JMS_BROKER,  agentURIPrefix + TASKREASONER_ADDRESS, this, brokerType);
+		ArbiAgentExecutor.execute(ENV_JMS_BROKER, port, agentURIPrefix + TASKREASONER_ADDRESS, this, brokerType);
 
+		ds.connect(ENV_JMS_BROKER, port, dsURIPrefix+TASKREASONER_ADDRESS, brokerType);
 		loggerManager = LoggerManager.getInstance();
 		
 		taskReasonerAction = new TaskReasonerAction(this, interpreter, loggerManager);
@@ -105,7 +105,7 @@ public class TaskReasoner_Robot extends ArbiAgent {
 	public void initAddress(String robotID, String brokerAddress) {
 		String brokerURL = "";
 		if(brokerAddress.equals("env")) {
-			brokerURL = "tcp://" + System.getenv("JMS_BROKER");
+			brokerURL = System.getenv("JMS_BROKER");
 		} else {
 			brokerURL = brokerAddress;
 		}
@@ -159,7 +159,6 @@ public class TaskReasoner_Robot extends ArbiAgent {
 	@Override
 	public void onStart() {
 		System.out.println("====onStart====");
-		ds.connect(ENV_JMS_BROKER, dsURIPrefix+TASKREASONER_ADDRESS, brokerType);
 		//goal and context is wrapped
 		//String subscriveGoal = "(rule (fact (goal $goal $precondition $postcondition)) --> (notify (goal $goal $precondition $postcondition)))";
 		//ds.subscribe(subscriveGoal);
@@ -204,11 +203,6 @@ public class TaskReasoner_Robot extends ArbiAgent {
 				e.printStackTrace();
 		}
 	}
-	
-	public static void main(String[] args) {
-		ArbiAgent agent = new TaskReasoner_Robot();
-	}
-	
 	public void sleep(int count) {
 		try {
 			Thread.sleep(count);
@@ -295,4 +289,9 @@ public class TaskReasoner_Robot extends ArbiAgent {
 	public void putUtilityFunction(String serviceName, String stringFunction) {
 		utilityCalculator.putUtilityFunction(serviceName, stringFunction);
 	}
+
+	
+//	public static void main(String[] args) {
+//		ArbiAgent agent = new TaskReasoner_Robot();
+//	}
 }
