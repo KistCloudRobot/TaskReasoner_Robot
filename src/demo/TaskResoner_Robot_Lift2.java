@@ -10,14 +10,9 @@ public class TaskResoner_Robot_Lift2 {
 		String robotID;
 		int port;
 		if(args.length == 0) {
-<<<<<<< HEAD
 			brokerAddress = "172.16.165.141";
 //			brokerAddress = "192.168.100.10";
 //			brokerAddress = "127.0.0.1";
-=======
-//			brokerAddress = "tcp://172.16.165.141:61115";
-			brokerAddress = "tcp://192.168.100.10:65115";
->>>>>>> branch 'KyonggiDemo' of https://github.com/KistCloudRobot/TaskReasoner_Robot.git
 			robotID = "AMR_LIFT2";	
 			port = 61115;
 		} else {
